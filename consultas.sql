@@ -1,0 +1,1 @@
+-- documento para consultas SQL 
