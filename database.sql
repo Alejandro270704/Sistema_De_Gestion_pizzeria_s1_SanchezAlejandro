@@ -96,6 +96,8 @@ create table domicilio (
 create table pizza_ingredientes (
     id int primary key,
     id_ingredientes int,
+    cantidad_usada
+    unidad enum('g','kg','ml','l')
     id_pizza int,
     foreign key (id_ingredientes) references ingrediente(id),
     foreign key (id_pizza) references pizza(id)
@@ -296,27 +298,27 @@ insert into domicilio (id, id_pedido, id_repartidor, hora_salida, hora_entregada
 (20,20,20,'2025-01-20','2025-01-20',3,5000);
 
 -- data pizza_ingrediente
-insert into pizza_ingredientes values
-(1,1,1),
-(2,2,2),
-(3,3,2),
-(4,4,3),
-(5,5,4),
-(6,6,7),
-(7,7,5),
-(8,8,9),
-(9,9,9),
-(10,10,20),
-(11,11,11),
-(12,12,12),
-(13,13,14),
-(14,14,8),
-(15,15,10),
-(16,16,13),
-(17,17,6),
-(18,18,15),
-(19,19,18),
-(20,20,19);
+nsert into pizza_ingredientes (id, id_ingredientes, cantidad_usada, unidad, id_pizza) values
+(1, 1, 120, 'g', 1),   -- Queso → Margarita
+(2, 2, 100, 'g', 2),   -- Jamón → Hawaiana
+(3, 3, 90, 'g', 3),    -- Piña → Peperoni
+(4, 4, 150, 'g', 4),   -- Peperoni → Mexicana
+(5, 5, 80, 'g', 5),    -- Champiñones → Vegetariana
+(6, 6, 140, 'g', 6),   -- Pollo → Cuatro Quesos
+(7, 7, 70, 'g', 7),    -- Cebolla → Pollo Champiñón
+(8, 8, 110, 'g', 8),   -- Tomate → BBQ
+(9, 9, 160, 'g', 9),   -- Carne → Carnes
+(10, 10, 90, 'g', 10), -- Tocino → Napolitana
+(11, 11, 60, 'g', 11), -- Aceitunas → Toscana
+(12, 12, 75, 'g', 12), -- Maíz → Campesina
+(13, 13, 85, 'g', 13), -- Pimentón → Ranchera
+(14, 14, 40, 'ml', 14),-- Salsa BBQ → Criolla
+(15, 15, 50, 'ml', 15),-- Salsa Tomate → Vegana
+(16, 16, 10, 'g', 16), -- Orégano → Deluxe
+(17, 17, 5, 'g', 17),  -- Ajo → Pollo BBQ
+(18, 18, 120, 'g', 18),-- Queso Vegano → Pepperoni Extra
+(19, 19, 100, 'g', 19),-- Tofu → Champiñón
+(20, 20, 90, 'g', 20); -- Espinaca → Carne y Tocino
 insert into pago_pedido values
 (1,1,24000),
 (2,2,38000),

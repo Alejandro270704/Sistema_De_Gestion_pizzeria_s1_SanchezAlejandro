@@ -47,6 +47,34 @@ end; //
 delimiter ;
 call pedido_repartidor(); 
 --Promedio de entrega por zona (AVG y JOIN).
+delimiter //
+create procedure promedio_zona()
+begin 
+select 
+z.nombre,
+avg(d.total_final) as promedio
+from domicilio d 
+left join repartidor r on r.id=d.id_repartidor
+left join zona z on z.id=r.id_zona 
+group by z.nombre;
+end; // 
+delimiter ;
+call promedio_zona(); 
 --Clientes que gastaron más de un monto (HAVING).
+delimiter //
+create procedure cliente_mas_gasto(in monto doubele)
+begin 
+select 
+p.nombre,
+sum(pd.total_final) as cantidad_gastada
+from pedido pd
+left join cliente c on c.id=pd.id_cliente 
+left join persona p on p.id=c.id
+group by p.nombre
+HAVING sum(cantidad_gastada) >= monto;
+end; // 
+delimiter ;
+call promedio_zona(); 
 --Búsqueda por coincidencia parcial de nombre de pizza (LIKE).
+
 --Subconsulta para obtener los clientes frecuentes (más de 5 pedidos mensuales).
