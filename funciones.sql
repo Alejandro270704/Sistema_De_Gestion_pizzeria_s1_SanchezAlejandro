@@ -25,3 +25,6 @@ delimiter ;
 
 
 select calcular_total(5);
+
+--Función para calcular la ganancia neta diaria 
+--(ventas - costos de ingredientes).
