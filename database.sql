@@ -1,10 +1,10 @@
 -- documento para creacion de la base de datos SQL 
-
+create database pizzeria;
 --creacion de la tabla persona 
 create table persona (
     id int primary key,
     nombre varchar(200),
-    telefono int,
+    telefono varchar(200),
     direccion varchar(200),
     correo_electronico varchar(200)
 );
