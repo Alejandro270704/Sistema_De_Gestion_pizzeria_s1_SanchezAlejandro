@@ -11,12 +11,12 @@ create table persona (
 );
 --creacion de la tabla cliente que hereda persona
 create table cliente (
-    id int auto_increment primary key,
+    id int  primary key,
     foreign key (id) references persona(id)
 );
 --creacion de la tabla vendedor que hereda persona
 create table vendedor (
-    id int auto_increment primary key,
+    id int  primary key,
     foreign key (id) references persona(id)
 );
 --creacion de la tabla zona
@@ -27,9 +27,9 @@ create table zona (
 );
 --creacion de la tabla repartidor que hereda persona
 create table repartidor (
-    id int auto_increment primary key,
+    id int primary key,
     id_zona int not null,
-    estado enum('disponible','no disponible') not null,
+    estado enum('disponible','no disponible') not null default 'disponible',
     foreign key (id) references persona(id),
     foreign key (id_zona) references zona(id)
 );
@@ -86,9 +86,9 @@ create table domicilio (
     id_pedido int not null,
     id_repartidor int not null,
     hora_salida datetime not null,
-    hora_entregada datetime ,
-    distancia_recorrida int not null,
-    costo_envio double not null,
+    hora_entregada datetime default null ,
+    distancia_recorrida_metros int not null,
+    costo_envio double not null default 0,
     foreign key (id_pedido) references pedido(id),
     foreign key (id_repartidor) references repartidor(id)
 );
@@ -107,7 +107,7 @@ create table historial_precios (
     id int auto_increment primary key,
     id_pizza int,
     nombre varchar(200),
-    tamano enum('personal','mediana','grande'),
+    tamano enum('personal','mediana','familiar'),
     precio_anterior double,
     precio_nuevo double,
     tipo enum('vegetariana','especial','clásica'),
@@ -171,27 +171,27 @@ insert into zona values
 (19,'El Dorado',1800),
 (20,'La Riviera',1900);
 -- data repartidor 
-insert into repartidor values
-(1,1,'disponible'),
-(2,2,'no disponible'),
-(3,3,'disponible'),
-(4,4,'disponible'),
-(5,5,'no disponible'),
-(6,6,'disponible'),
-(7,7,'disponible'),
-(8,8,'no disponible'),
-(9,9,'disponible'),
-(10,10,'disponible'),
-(11,11,'no disponible'),
-(12,12,'disponible'),
-(13,13,'disponible'),
-(14,14,'no disponible'),
-(15,15,'disponible'),
-(16,16,'disponible'),
-(17,17,'no disponible'),
-(18,18,'disponible'),
-(19,19,'disponible'),
-(20,20,'no disponible');
+insert into repartidor (id, id_zona) values
+(1,1),
+(2,2),
+(3,3),
+(4,4),
+(5,5),
+(6,6),
+(7,7),
+(8,8),
+(9,9),
+(10,10),
+(11,11),
+(12,12),
+(13,13),
+(14,14),
+(15,15),
+(16,16),
+(17,17),
+(18,18),
+(19,19),
+(20,20);
 
 --data pizza 
 
@@ -285,27 +285,28 @@ insert into detalle_pedido (id, id_pedido, id_pizza, cantidad_pizza, iva) values
 (20,20,6,2,22);
 -- data domicilio 
 
-insert into domicilio (id, id_pedido, id_repartidor, hora_salida, hora_entregada, distancia_recorrida, costo_envio) values
-(1,1,1,'2025-01-01','2025-01-01',3,5000),
-(2,2,2,'2025-01-02','2025-01-02',4,6000),
-(3,3,3,'2025-01-03','2025-01-03',2,4000),
-(4,4,4,'2025-01-04','2025-01-04',5,7000),
-(5,5,5,'2025-01-05','2025-01-05',3,5000),
-(6,6,6,'2025-01-06','2025-01-06',4,6000),
-(7,7,7,'2025-01-07','2025-01-07',1,3000),
-(8,8,8,'2025-01-08','2025-01-08',2,4000),
-(9,9,9,'2025-01-09','2025-01-09',3,5000),
-(10,10,10,'2025-01-10','2025-01-10',4,6000),
-(11,11,11,'2025-01-11','2025-01-11',5,7000),
-(12,12,12,'2025-01-12','2025-01-12',2,4000),
-(13,13,13,'2025-01-13','2025-01-13',3,5000),
-(14,14,14,'2025-01-14','2025-01-14',4,6000),
-(15,15,15,'2025-01-15','2025-01-15',3,5000),
-(16,16,16,'2025-01-16','2025-01-16',1,3000),
-(17,17,17,'2025-01-17','2025-01-17',4,6000),
-(18,18,18,'2025-01-18','2025-01-18',5,7000),
-(19,19,19,'2025-01-19','2025-01-19',2,4000),
-(20,20,20,'2025-01-20','2025-01-20',3,5000);
+INSERT INTO domicilio (id, id_pedido, id_repartidor, hora_salida, distancia_recorrida_metros, costo_envio)
+VALUES
+(1,1,1,'2025-01-01 12:00:00',3000,5000),
+(2,2,2,'2025-01-02 13:10:00',4000,6000),
+(3,3,3,'2025-01-03 14:00:00',2000,4000),
+(4,4,4,'2025-01-04 15:00:00',5000,7000),
+(5,5,5,'2025-01-05 12:45:00',3000,5000),
+(6,6,6,'2025-01-06 11:20:00',4000,6000),
+(7,7,7,'2025-01-07 16:00:00',1000,3000),
+(8,8,8,'2025-01-08 17:00:00',2000,4000),
+(9,9,9,'2025-01-09 14:40:00',3000,5000),
+(10,10,10,'2025-01-10 18:00:00',4000,6000),
+(11,11,11,'2025-01-11 12:30:00',5000,7000),
+(12,12,12,'2025-01-12 13:00:00',2000,4000),
+(13,13,13,'2025-01-13 11:50:00',3000,5000),
+(14,14,14,'2025-01-14 16:10:00',4000,6000),
+(15,15,15,'2025-01-15 10:30:00',3000,5000),
+(16,16,16,'2025-01-16 17:00:00',1000,3000),
+(17,17,17,'2025-01-17 19:00:00',4000,6000),
+(18,18,18,'2025-01-18 14:20:00',5000,7000),
+(19,19,19,'2025-01-19 12:40:00',2000,4000),
+(20,20,20,'2025-01-20 18:10:00',3000,5000);
 
 -- data pizza_ingrediente
 insert into pizza_ingredientes (id, id_ingredientes, cantidad_usada, unidad, id_pizza) values
