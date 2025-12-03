@@ -1,108 +1,119 @@
 -- documento para creacion de la base de datos SQL 
 create database pizzeria;
+use pizzeria;
 --creacion de la tabla persona 
 create table persona (
-    id int primary key,
-    nombre varchar(200),
-    telefono varchar(200),
-    direccion varchar(200),
-    correo_electronico varchar(200)
+    id int auto_increment primary key,
+    nombre varchar(200) not null,
+    telefono varchar(200) not null,
+    direccion varchar(200) not null,
+    correo_electronico varchar(200) not null
 );
 --creacion de la tabla cliente que hereda persona
 create table cliente (
-    id int primary key,
+    id int auto_increment primary key,
     foreign key (id) references persona(id)
 );
 --creacion de la tabla vendedor que hereda persona
 create table vendedor (
-    id int primary key,
+    id int auto_increment primary key,
     foreign key (id) references persona(id)
 );
 --creacion de la tabla zona
 create table zona (
-    id int primary key,
-    nombre varchar(200),
-    precio_metro double
+    id int auto_increment primary key,
+    nombre varchar(200) not null,
+    precio_metro double not null
 );
 --creacion de la tabla repartidor que hereda persona
 create table repartidor (
-    id int primary key,
-    id_zona int,
-    estado enum('disponible','no disponible'),
+    id int auto_increment primary key,
+    id_zona int not null,
+    estado enum('disponible','no disponible') not null,
     foreign key (id) references persona(id),
     foreign key (id_zona) references zona(id)
 );
 --creacion de la tabla pizza
 create table pizza (
-    id int primary key,
-    nombre varchar(200),
-    tamano enum('personal','mediana','familiar'),
-    precio_base double,
-    tipo enum('vegetariana','especial','clásica')
+    id int auto_increment primary key,
+    nombre varchar(200) not null,
+    tamano enum('personal','mediana','familiar') not null,
+    precio_base double not null,
+    tipo enum('vegetariana','especial','clásica') not null
 );
 --creacion de la tabla ingrediente
 create table ingrediente (
-    id int primary key,
-    nombre varchar(200),
-    stock int,
-    precio int,
-    unidad enum('g','kg','ml','l'),
-    nivel_stock int
+    id int auto_increment primary key,
+    nombre varchar(200) not null,
+    stock int not null,
+    precio int not null,
+    unidad enum('g','kg','ml','l') not null,
+    nivel_stock int not null
 );
 --creacion de la tabla pedido
 create table pedido (
-    id int primary key,
-    id_cliente int,
-    id_vededor int,
-    fecha_pedido date,
-    metodo_pago enum('efectivo','tarjeta','app'),
-    estado_pedido enum('pendiente','en preparación','entregado','cancelado'),
-    tipo_pedido enum('domicilio','local'),
-    total double default 0,
+    id int auto_increment primary key,
+    id_cliente int not null,
+    id_vededor int not null,
+    fecha_pedido date not null,
+    metodo_pago enum('efectivo','tarjeta','app') not null,
+    estado_pedido enum('pendiente','en preparación','entregado','cancelado') not null,
+    tipo_pedido enum('domicilio','local') not null,
+    total double default 0 not null,
     foreign key (id_cliente) references cliente(id),
     foreign key (id_vededor) references vendedor(id)
 );
 create table pago_pedido(
-    id int primary key ,
-    id_pedido int ,
-    cantidad_pagada double ,
+    id int auto_increment primary key ,
+    id_pedido int not null,
+    cantidad_pagada double not null,
     foreign key (id_pedido) references pedido(id)
 );
 --creacion de la tabla detalle_pedido 
 create table detalle_pedido (
-    id int primary key,
-    id_pedido int,
-    id_pizza int,
-    cantidad_pizza int,
-    iva int ,
-    subtotal double default 0,
+    id int auto_increment primary key,
+    id_pedido int not null,
+    id_pizza int not null,
+    cantidad_pizza int not null,
+    iva int not null,
+    subtotal double default 0 not null,
     foreign key (id_pedido) references pedido(id),
     foreign key (id_pizza) references pizza(id)
 );
 --creacion de la tabla domicilio 
 create table domicilio (
-    id int primary key,
-    id_pedido int,
-    id_repartidor int,
-    hora_salida date,
-    hora_entregada date,
-    distancia_recorrida int,
-    costo_envio double,
+    id int auto_increment primary key,
+    id_pedido int not null,
+    id_repartidor int not null,
+    hora_salida datetime not null,
+    hora_entregada datetime ,
+    distancia_recorrida int not null,
+    costo_envio double not null,
     foreign key (id_pedido) references pedido(id),
     foreign key (id_repartidor) references repartidor(id)
 );
 --creacion de la tabla pizza_ingredientes 
 create table pizza_ingredientes (
-    id int primary key,
-    id_ingredientes int,
-    cantidad_usada
-    unidad enum('g','kg','ml','l')
-    id_pizza int,
+    id int auto_increment primary key,
+    id_ingredientes int not null,
+    cantidad_usada int not null,
+    unidad enum('g','kg','ml','l') not null,
+    id_pizza int not null,
     foreign key (id_ingredientes) references ingrediente(id),
     foreign key (id_pizza) references pizza(id)
 );
-
-
+-- esta es una tabla la cual ingresa los cambios de precio en una pizza 
+create table historial_precios (
+    id int auto_increment primary key,
+    id_pizza int,
+    nombre varchar(200),
+    tamano enum('personal','mediana','grande'),
+    precio_anterior double,
+    precio_nuevo double,
+    tipo enum('vegetariana','especial','clásica'),
+    fecha_cambio timestamp default current_timestamp,
+    foreign key (id_pizza) references pizza(id)
+);
 -- organizacion de la data 
 
 --data persona

@@ -22,10 +22,42 @@ delimiter ;
 --Trigger de auditoría que registre en una tabla historial_precios
 -- cada vez que se modifique el precio de una pizza.
 
-
+delimiter //
+create trigger auditoría_historial_precios
+before update on pizza 
+    for each row 
+    begin 
+    if old.precio_base != new.precio_base then 
+    insert into historial_precios (id_pizza,nombre,tamano,precio_anterior,
+    precio_nuevo,tipo) values (
+        old.id,
+        old.nombre,
+        old.tamano,
+        old.precio_base,
+        new.precio_base,
+        old.tipo
+    );
+    end if ;
+end; //
+delimiter ;
+update pizza set precio_base=1000 where id=1;
 --Trigger para marcar repartidor como “disponible” 
 --nuevamente cuando termina un domicilio.
-
+delimiter //
+create trigger calcular_disponibilidad_repartidor
+after insert on domicilio 
+for each row  
+if new.hora_entregada = is not null then 
+update repartidor
+set estado='disponible'
+where id=new.id_repartidor;
+else if new.hora_entregada = null then 
+update repartidor
+set estado='no disponible'
+where id=new:id_repartidor;
+end if ;
+end; //
+delimiter ;
 --trigger para calcular el total en detalle_pedido y pedido
 delimiter //
 
