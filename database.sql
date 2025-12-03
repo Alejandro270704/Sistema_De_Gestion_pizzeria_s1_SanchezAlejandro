@@ -66,8 +66,8 @@ create table pago_pedido(
     id int primary key ,
     id_pedido int ,
     cantidad_pagada double ,
-    foreign key (id_pedido) references pedido (id)
-)
+    foreign key (id_pedido) references pedido(id)
+);
 --creacion de la tabla detalle_pedido 
 create table detalle_pedido (
     id int primary key,
@@ -88,7 +88,6 @@ create table domicilio (
     hora_entregada date,
     distancia_recorrida int,
     costo_envio double,
-    total_final double default 0,
     foreign key (id_pedido) references pedido(id),
     foreign key (id_repartidor) references repartidor(id)
 );
@@ -298,7 +297,7 @@ insert into domicilio (id, id_pedido, id_repartidor, hora_salida, hora_entregada
 (20,20,20,'2025-01-20','2025-01-20',3,5000);
 
 -- data pizza_ingrediente
-nsert into pizza_ingredientes (id, id_ingredientes, cantidad_usada, unidad, id_pizza) values
+insert into pizza_ingredientes (id, id_ingredientes, cantidad_usada, unidad, id_pizza) values
 (1, 1, 120, 'g', 1),   -- Queso → Margarita
 (2, 2, 100, 'g', 2),   -- Jamón → Hawaiana
 (3, 3, 90, 'g', 3),    -- Piña → Peperoni
@@ -319,7 +318,7 @@ nsert into pizza_ingredientes (id, id_ingredientes, cantidad_usada, unidad, id_p
 (18, 18, 120, 'g', 18),-- Queso Vegano → Pepperoni Extra
 (19, 19, 100, 'g', 19),-- Tofu → Champiñón
 (20, 20, 90, 'g', 20); -- Espinaca → Carne y Tocino
-insert into pago_pedido values
+INSERT INTO pago_pedido (id, id_pedido, cantidad_pagada) VALUES
 (1,1,24000),
 (2,2,38000),
 (3,3,78000),

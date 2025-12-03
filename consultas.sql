@@ -76,5 +76,26 @@ end; //
 delimiter ;
 call promedio_zona(); 
 --Búsqueda por coincidencia parcial de nombre de pizza (LIKE).
-
+delimiter //
+create procedure busqueda_coincidencia(in v_variable varchar(200))
+begin 
+select p.nombre as nombre from pizza p where p.nombre like concat(v_variable,'%');
+end; //
+delimiter ;
+call busqueda_coincidencia('');
 --Subconsulta para obtener los clientes frecuentes (más de 5 pedidos mensuales).
+delimiter //
+create procedure clientes_frecuentes( )
+begin 
+select 
+ps.nombre as cliente,
+count(dp.id) as total_pedidos
+from detalle_pedido dp 
+left join pedido p on p.id=dp.id_pedido
+left join cliente c on p.id_cliente=c.id
+left join persona ps on ps.id=c.id
+where p.fecha_pedido 
+group by c.id
+having count (p.id) 
+end; //
+delimiter ;
