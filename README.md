@@ -15,7 +15,7 @@ Todo esto se implementa en **MySQL**, con tablas, relaciones, triggers, procedim
 
 ## Modelo Lógico de la Base de Datos
 
-```memaid
+```mermaid
 ---
 config:
   layout: elk
