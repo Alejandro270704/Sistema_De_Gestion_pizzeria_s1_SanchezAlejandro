@@ -47,14 +47,15 @@ delimiter //
 create trigger calcular_disponibilidad_repartidor
 after insert on domicilio 
 for each row  
-if new.hora_entregada = is not null then 
+begin
+if new.hora_entregada is not null then 
 update repartidor
 set estado='disponible'
-where id=new.id_repartidor;
-else if new.hora_entregada = null then 
+where id = new.id_repartidor;
+else
 update repartidor
 set estado='no disponible'
-where id=new:id_repartidor;
+where id = new.id_repartidor;
 end if ;
 end; //
 delimiter ;
