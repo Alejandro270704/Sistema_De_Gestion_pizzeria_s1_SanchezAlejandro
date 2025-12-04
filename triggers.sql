@@ -130,3 +130,15 @@ begin
 end //
 
 delimiter ;
+
+-- trigger para sumar envio al total
+delimiter //
+create trigger sumar_envio
+after insert on domicilio
+for each row
+begin 
+update pedido 
+set total= total + new.costo_envio
+where id=new.id_pedido
+end; //
+delimiter ;
