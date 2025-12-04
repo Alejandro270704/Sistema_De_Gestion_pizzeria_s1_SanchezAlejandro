@@ -86,8 +86,6 @@ for each row
 begin
     declare suma_subtotales double default 0;
     declare iva_total double default 0;
-    declare costo_envio double default 0;
-    declare tipo varchar(20);
 
     select sum(subtotal)
     into suma_subtotales
@@ -104,17 +102,31 @@ begin
     from pedido
     where id = NEW.id_pedido;
 
-    if tipo = 'domicilio' then
-        select ifnull(costo_envio,0)
-        into costo_envio
-        from domicilio
-        where id_pedido = NEW.id_pedido
-        limit 1;  -- ver a futuro si es necesario o si se deja de implementar
-    end if;
-
     update pedido
-    set total = suma_subtotales + iva_total + costo_envio
+    set total = suma_subtotales + iva_total 
     where id = NEW.id_pedido;
+end //
+
+delimiter ;
+
+-- triger para calcular costo de envio
+
+delimiter //
+
+create trigger calcular_costo_envio
+before insert on domicilio
+for each row
+begin
+    declare v_precio_metro int ;
+
+    select z.precio_metro
+    into 
+    v_precio_metro
+    from repartidor r
+    left join zona z on r.id_zona = z.id
+    where r.id = new.id_repartidor;
+
+    set new.costo_envio = v_precio_metro * new.distancia_recorrida_metros;
 end //
 
 delimiter ;
